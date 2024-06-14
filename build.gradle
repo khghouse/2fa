@@ -20,7 +20,15 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.16.0' // 최초 1회 개인키 발급에 사용 (16진수, base32로 변환)
+    implementation group: 'com.google.zxing', name: 'javase', version: '3.5.2' // QR 이미지 생성에 사용
+    implementation group: 'de.taimos', name: 'totp', version: '1.0' // 일회용 비밀번호 생성에 사용
+
+    compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
+    annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
