@@ -1,5 +1,6 @@
 package com.fa.component;
 
+import com.google.zxing.WriterException;
 import org.apache.commons.codec.binary.Base32;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.IOException;
+
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -63,7 +68,7 @@ class GoogleOTPTest {
     }
 
     @Test
-    @DisplayName("6자리 코드 리턴")
+    @DisplayName("6자리 코드 리턴한다.")
     void getTOTPCode() {
         String lastCode = null;
         while (true) {
@@ -77,6 +82,36 @@ class GoogleOTPTest {
             } catch (InterruptedException e) {
             }
         }
+    }
+
+    @Test
+    @DisplayName("시크릿키, 계정명, 발급자를 매개변수로 전달하여 구글 OTP 인증용 링크를 생성한다.")
+    void getGoogleAuthenticatorBarCode() {
+        // given
+        String account = "khghouse@naver.com";
+        String issuer = "study2FA";
+
+        // when
+        String result = GoogleOTP.getGoogleAuthenticatorBarCode(secret, account, issuer);
+
+        // then
+        assertThat(result).isNotNull();
+    }
+
+    @Test
+    @DisplayName("구글 OTP 바코드 데이터로 QR코드 이미지를 생성한다.")
+    void createQRCodeImage() throws IOException, WriterException {
+        // given
+        String account = "khghouse@naver.com";
+        String issuer = "study2FA";
+        String barCode = GoogleOTP.getGoogleAuthenticatorBarCode(secret, account, issuer);
+
+        // when
+        GoogleOTP.createQRCodeImage(barCode, account, 200, 200);
+
+        // then
+        File result = new File("src/main/resources/static/barcode/" + account + ".png");
+        assertThat(result.exists()).isTrue();
     }
 
 }
