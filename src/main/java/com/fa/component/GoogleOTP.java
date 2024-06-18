@@ -8,6 +8,7 @@ import com.google.zxing.common.BitMatrix;
 import de.taimos.totp.TOTP;
 import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.codec.binary.Hex;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -20,6 +21,14 @@ import java.security.SecureRandom;
 @Component
 public class GoogleOTP {
 
+    @Value("${google.otp.secret}")
+    private String secretKey;
+
+    private final String ISSUER = "study2FA";
+
+    /**
+     * (최초 1회) GoogleOTP 시크릿 키 생성
+     */
     public static String generateSecretKey() {
         SecureRandom random = new SecureRandom();
 
@@ -62,7 +71,7 @@ public class GoogleOTP {
      * 인증용 바코드 링크를 이용하여 QR코드 이미지를 생성한다.
      */
     public static void createQRCodeImage(String barCode, String account, int height, int width) throws WriterException, IOException {
-        
+
         BitMatrix matrix = new MultiFormatWriter().encode(barCode, BarcodeFormat.QR_CODE, width, height);
 
         File file = new File("src/main/resources/static/barcode/" + account + ".png");

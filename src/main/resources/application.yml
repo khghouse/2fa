@@ -3,16 +3,6 @@ spring:
     active: local # default로 사용될 프로파일 명시
     include: key # 분리되어 있는 yml 포함
 
-  datasource:
-    url: jdbc:h2:mem:2fa
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-
-  jpa:
-    hibernate:
-      ddl-auto: none
-
 --- # 프로파일을 구분
 
 spring:
@@ -20,34 +10,9 @@ spring:
     activate:
       on-profile: local # 해당 프로파일이 선택되었을 때만 활성화
 
-  jpa:
-    hibernate:
-      ddl-auto: create
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-    defer-datasource-initialization: true
-
-  h2:
-    console:
-      enabled: true
-
 ---
 
 spring:
   config:
     activate:
       on-profile: test
-
-  jpa:
-    hibernate:
-      ddl-auto: create
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-
-  sql:
-    init:
-      mode: never

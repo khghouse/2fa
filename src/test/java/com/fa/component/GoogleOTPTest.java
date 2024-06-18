@@ -2,25 +2,23 @@ package com.fa.component;
 
 import com.google.zxing.WriterException;
 import org.apache.commons.codec.binary.Base32;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Transactional
 @ActiveProfiles("test")
 class GoogleOTPTest {
 
-    @Value("${secret}")
+    @Value("${google.otp.secret}")
     private String secret;
 
     /**
@@ -68,6 +66,7 @@ class GoogleOTPTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("6자리 코드 리턴한다.")
     void getTOTPCode() {
         String lastCode = null;

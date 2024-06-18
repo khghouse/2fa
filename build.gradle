@@ -18,8 +18,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.16.0' // 최초 1회 개인키 발급에 사용 (16진수, base32로 변환)
     implementation group: 'com.google.zxing', name: 'javase', version: '3.5.2' // QR 이미지 생성에 사용
