@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class GoogleOTPTest {
+class GoogleOTPExampleTest {
 
     @Value("${google.otp.secret}")
     private String secret;
@@ -58,7 +58,7 @@ class GoogleOTPTest {
     @DisplayName("Base32로 인코딩된 secret을 생성한다.")
     void generateSecretKey() {
         // when
-        String result = GoogleOTP.generateSecretKey();
+        String result = GoogleOTPExample.generateSecretKey();
         System.out.println("secret : " + result);
 
         // then
@@ -71,7 +71,7 @@ class GoogleOTPTest {
     void getTOTPCode() {
         String lastCode = null;
         while (true) {
-            String code = GoogleOTP.getTOTPCode(secret);
+            String code = GoogleOTPExample.getTOTPCode(secret);
             if (!code.equals(lastCode)) {
                 System.out.println(code);
             }
@@ -91,7 +91,7 @@ class GoogleOTPTest {
         String issuer = "study2FA";
 
         // when
-        String result = GoogleOTP.getGoogleAuthenticatorBarCode(secret, account, issuer);
+        String result = GoogleOTPExample.getGoogleAuthenticatorBarCode(secret, account, issuer);
 
         // then
         assertThat(result).isNotNull();
@@ -103,10 +103,10 @@ class GoogleOTPTest {
         // given
         String account = "khghouse@naver.com";
         String issuer = "study2FA";
-        String barCode = GoogleOTP.getGoogleAuthenticatorBarCode(secret, account, issuer);
+        String barCode = GoogleOTPExample.getGoogleAuthenticatorBarCode(secret, account, issuer);
 
         // when
-        GoogleOTP.createQRCodeImage(barCode, account, 200, 200);
+        GoogleOTPExample.createQRCodeImage(barCode, account, 200, 200);
 
         // then
         File result = new File("src/main/resources/static/barcode/" + account + ".png");
