@@ -1,5 +1,6 @@
 package com.fa.component;
 
+import org.apache.commons.codec.binary.Base32;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -53,9 +54,25 @@ public class AES256 {
     }
 
     /**
+     * 암호화 Base64
+     */
+    public static String encryptBase64(String plainText) throws Exception {
+        byte[] cipherTextWithIv = encrypt(plainText);
+        return bytesToBase64(cipherTextWithIv);
+    }
+
+    /**
+     * 암호화 Base32
+     */
+    public static String encryptBase32(String plainText) throws Exception {
+        byte[] cipherTextWithIv = encrypt(plainText);
+        return bytesToBase32(cipherTextWithIv);
+    }
+
+    /**
      * 암호화
      */
-    public static String encrypt(String plainText) throws Exception {
+    private static byte[] encrypt(String plainText) throws Exception {
         Cipher cipher = Cipher.getInstance(TRANSFORMATION); // AES/CBC/PKCS5Padding 알고리즘을 사용하는 Cipher 객체 생성
         IvParameterSpec ivParameterSpec = new IvParameterSpec(iv); // IV를 포함하는 IvParameterSpec 객체 생성
         cipher.init(Cipher.ENCRYPT_MODE, key, ivParameterSpec); // Cipher 객체를 암호화 모드로 초기화
@@ -64,8 +81,7 @@ public class AES256 {
         byte[] cipherTextWithIv = new byte[iv.length + cipherText.length]; // IV와 암호문을 포함할 바이트 배열 생성
         System.arraycopy(iv, 0, cipherTextWithIv, 0, iv.length); // IV를 바이트 배열의 앞 부분에 복사
         System.arraycopy(cipherText, 0, cipherTextWithIv, iv.length, cipherText.length); // 암호문을 그 뒤에 복사
-
-        return bytesToBase64(cipherTextWithIv); // IV와 암호문을 포함한 바이트 배열을 Base64 인코딩하여 문자열로 반환
+        return cipherTextWithIv;
     }
 
     /**
@@ -102,6 +118,14 @@ public class AES256 {
      */
     private static byte[] base64ToBytes(String text) {
         return Base64.getDecoder().decode(text);
+    }
+
+    /**
+     * bate[] -> String (Base32)
+     */
+    private static String bytesToBase32(byte[] bytes) {
+        Base32 base32 = new Base32();
+        return base32.encodeToString(bytes);
     }
 
 }

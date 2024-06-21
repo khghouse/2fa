@@ -1,5 +1,6 @@
 package com.fa.controller;
 
+import com.fa.request.AuthCodeRequest;
 import com.fa.request.LoginRequest;
 import com.fa.service.LoginService;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,18 @@ public class LoginController {
         return "login";
     }
 
-    @PostMapping(value = "/login")
+    @PostMapping("/login")
     public String loginProcess(@ModelAttribute LoginRequest loginRequest, Model model) throws Exception {
-        String qrImageFileName = loginService.login(loginRequest.getId(), loginRequest.getPassword());
-        model.addAttribute("qrImagePath", "/image/qr/" + qrImageFileName + ".png");
+        String qrImageUrl = loginService.login(loginRequest.getId(), loginRequest.getPassword());
+        model.addAttribute("qrImageUrl", qrImageUrl);
+        model.addAttribute("id", loginRequest.getId());
         return "loginResult";
+    }
+
+    @PostMapping("/auth-code")
+    public String authCode(@ModelAttribute AuthCodeRequest authCodeRequest, Model model) {
+        model.addAttribute("result", loginService.validationQRCode(authCodeRequest.getId(), authCodeRequest.getAuthCode()));
+        return "2faResult";
     }
 
 }

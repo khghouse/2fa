@@ -5,6 +5,20 @@
     <title>login result</title>
 </head>
 <body>
-    <img th:src="@{${qrImagePath}}" />
+<div th:if="${qrImageUrl != null}">
+    <img th:src="@{${qrImageUrl}}" alt="QR code"/>
+    <br/>
+    <label>
+        <form action="/auth-code" method="post">
+            <input type="hidden" name="id" th:value="${id}"/>
+            <input type="text" name="authCode" placeholder="인증 번호" maxlength="6" inputmode="numeric" required/>
+            <input type="submit" value="입력"/>
+        </form>
+    </label>
+</div>
+<div th:if="${qrImageUrl == null}">
+    <div>아이디 또는 패스워드가 일치하지 않습니다.</div>
+    <input type="button" value="이전" onclick="history.back()"/>
+</div>
 </body>
 </html>

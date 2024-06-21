@@ -41,7 +41,7 @@ class AES256Test {
         String plainText = "khghouse@naver.com";
 
         // when
-        String result = AES256.encrypt(plainText);
+        String result = AES256.encryptBase64(plainText);
 
         // then
         assertThat(result).isNotNull();
@@ -52,7 +52,7 @@ class AES256Test {
     void decrypt() throws Exception {
         // given
         String plainText = "khghouse@naver.com";
-        String encrypted = AES256.encrypt(plainText);
+        String encrypted = AES256.encryptBase64(plainText);
 
         // when
         String result = AES256.decrypt(encrypted);
